@@ -2,12 +2,11 @@ import { Component, OnInit, ViewChild  } from '@angular/core';
 import { MatTable } from '@angular/material/table';
 import { SuperheroService } from '../../services/superhero.service';
 import { Superhero } from '../../domain/superhero';
-import { FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-superhero-list',
   templateUrl: './superhero-list.component.html',
-  styleUrls: ['./superhero-list.component.scss']
+  styleUrls: ['./superhero-list.component.scss'],
 })
 export class SuperheroListComponent implements OnInit {
   superheros: Superhero[] = [];
@@ -31,10 +30,13 @@ export class SuperheroListComponent implements OnInit {
 
     await this.superheroService.delete(id);
     await this.fetchSuperheros();
-    this.table.renderRows();
+
+    if (this.table) {
+      this.table.renderRows();
+    }
   }
 
-  filterByName(name: string): void {
-    this.superheroService.findAllByName(name).then(res => this.superheros = res);
+  async filterByName(name: string): Promise<void> {
+    await this.superheroService.findAllByName(name).then(res => this.superheros = res);
   }
 }

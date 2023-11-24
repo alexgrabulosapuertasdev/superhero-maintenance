@@ -32,11 +32,11 @@ export class SuperheroFormComponent implements OnInit {
     }
   }
 
-  createFormToCreateSuperhero(): void {
+  private createFormToCreateSuperhero(): void {
     this.form.addControl('name', new FormControl(undefined, [Validators.required]));
   }
 
-  async createFormToUpdateSuperhero(id: string): Promise<void> {
+  private async createFormToUpdateSuperhero(id: string): Promise<void> {
     this.form.addControl('name', new FormControl(undefined));
 
     const { name } = await this.superheroService.findOneById(id);
