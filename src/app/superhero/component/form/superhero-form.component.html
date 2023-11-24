@@ -6,7 +6,7 @@
   <form [formGroup]="form" (ngSubmit)="handleSave()" class="form">
     <mat-form-field>
       <mat-label>Nombre</mat-label>
-      <input matInput type="text" formControlName="name">
+      <input matInput type="text" formControlName="name" (input)="uppercaseTheInputText(form.controls['name']!)">
       <small *ngIf="isSubmitted && !form.value.name" style="color: red;">* Obligatorio</small>
     </mat-form-field>
 

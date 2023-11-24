@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Route, Router } from "@angular/router";
-import { Superhero } from "../../domain/superhero";
 import { SuperheroService } from "../../services/superhero.service";
 
 @Component({
@@ -69,6 +68,11 @@ export class SuperheroFormComponent implements OnInit {
 
   private async updateSuperhero(): Promise<void> {
     await this.superheroService.update(this.superheroId!, this.form.value);
+  }
+
+  uppercaseTheInputText(control: AbstractControl): void {
+    const {name } =this.form.controls
+    control.setValue(control.value.toUpperCase());
   }
 
   private goToList(): void {
