@@ -1,4 +1,6 @@
-<section>
+<p *ngIf="isLoading">Estamos obteniendo los datos, disculpe la demora</p>
+
+<section *ngIf="!isLoading">
   <header class="header">
     <h2 class="header__title">Listado de superheroes</h2>
 

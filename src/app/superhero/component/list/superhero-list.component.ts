@@ -12,11 +12,13 @@ export class SuperheroListComponent implements OnInit {
   superheros: Superhero[] = [];
   @ViewChild(MatTable, { static: true }) table!: MatTable<any>;
   filterName: string = '';
+  isLoading: boolean = true;
 
   constructor(private readonly superheroService: SuperheroService) {}
   
   async ngOnInit(): Promise<void> {
     await this.fetchSuperheros();
+    this.isLoading = false;
   }
 
   async fetchSuperheros(): Promise<void> {
@@ -29,7 +31,9 @@ export class SuperheroListComponent implements OnInit {
     if (!isConfirmed) return;
 
     await this.superheroService.delete(id);
+    this.isLoading = true;
     await this.fetchSuperheros();
+    this.isLoading = false;
 
     if (this.table) {
       this.table.renderRows();
