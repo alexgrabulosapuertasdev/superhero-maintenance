@@ -1,0 +1,48 @@
+<section>
+  <header class="header">
+    <h2 class="header__title">Listado de superheroes</h2>
+
+    <fieldset>
+      <label for="">Filtra por nombre: </label>
+      <input mat-input type="text" [(ngModel)]="filterName" (ngModelChange)="filterByName(filterName)">
+    </fieldset>
+
+    <a href="superhero/create" class="option option-create">
+      <mat-icon fontIcon="add"></mat-icon>
+      Añadir
+    </a>
+  </header>
+
+  <table mat-table [dataSource]="superheros" matSort>
+    <ng-container matColumnDef="update">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <a href="superhero/update/{{ element.id }}" class="option option-update">
+          <mat-icon fontIcon="edit"></mat-icon>
+        </a>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="id">
+      <th mat-header-cell *matHeaderCellDef>ID</th>
+      <td mat-cell *matCellDef="let element">{{ element.id }}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>Name</th>
+      <td mat-cell *matCellDef="let element">{{element.name}}</td>
+    </ng-container>
+
+    <ng-container matColumnDef="delete">
+      <th mat-header-cell *matHeaderCellDef></th>
+      <td mat-cell *matCellDef="let element">
+        <button class="option option-delete" (click)="delete(element.id)">
+          <mat-icon fontIcon="delete"></mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="['update', 'id', 'name', 'delete']"></tr>
+    <tr mat-row *matRowDef="let row; columns: ['update', 'id', 'name', 'delete']"></tr>
+  </table>
+</section>

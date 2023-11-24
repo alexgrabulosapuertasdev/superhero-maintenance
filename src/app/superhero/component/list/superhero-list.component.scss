@@ -1,0 +1,33 @@
+.header {
+  align-items: center;
+  background: rgb(201, 201, 201);
+  padding: .5rem 1rem;
+  display: flex;
+  gap: 2rem;
+  justify-content: space-between;
+  margin-bottom: 4px;
+
+  &__title {
+    margin: 0;
+  }
+}
+
+.option {
+  background: transparent;
+
+  &-create {
+    color: rgb(43, 209, 43);
+    background: var(--mat-table-background-color);
+    padding: .5rem;
+    display: flex;
+    place-items: center;
+    text-decoration: none;
+    font-weight: 500;
+  }
+  &-update {
+    color: yellow;
+  }
+  &-delete {
+    color: red;
+  }
+}

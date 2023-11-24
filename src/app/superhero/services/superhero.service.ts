@@ -7,8 +7,14 @@ import { SuperheroUpdate } from '../domain/superhero-update.interface';
   providedIn: 'root'
 })
 export class SuperheroService {
+  private readonly INITIAL_SUPERHEROS = [
+    { id: '1', name: 'Spiderman', },
+    { id: '2', name: 'Superman', },
+    { id: '3', name: 'Manolito el fuerte', },
+    { id: '4', name: 'Hulk', },
+  ];
 
-  superheros: Superhero[] = [];
+  superheros: Superhero[] = [...this.INITIAL_SUPERHEROS];
 
   constructor() {}
 

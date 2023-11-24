@@ -1,0 +1,15 @@
+<section>
+  <h2>
+    {{ isEditMode ? 'Modificar superheroe' : 'Crear superheroe' }}
+  </h2>
+  
+  <form [formGroup]="form" (ngSubmit)="handleSave()" class="form">
+    <mat-form-field>
+      <mat-label>Nombre</mat-label>
+      <input matInput type="text" formControlName="name">
+      <small *ngIf="isSubmitted && !form.value.name" style="color: red;">* Obligatorio</small>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary">Guardar</button>
+  </form>
+</section>
