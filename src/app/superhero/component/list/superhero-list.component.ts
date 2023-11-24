@@ -30,6 +30,7 @@ export class SuperheroListComponent implements OnInit {
     if (!isConfirmed) return;
 
     await this.superheroService.delete(id);
+    await this.fetchSuperheros();
     this.table.renderRows();
   }
 

@@ -3,7 +3,6 @@ import { TestBed } from '@angular/core/testing';
 import { SuperheroService } from './superhero.service';
 import { Superhero } from '../domain/superhero';
 import { SuperheroCreate } from '../domain/superhero-create.interface';
-import { SuperheroUpdate } from '../domain/superhero-update.interface';
 
 describe('SuperheroService', () => {
   let service: SuperheroService;
@@ -11,7 +10,7 @@ describe('SuperheroService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({});
     service = TestBed.inject(SuperheroService);
-    service.superheros = [];
+    localStorage.setItem('superheros', JSON.stringify([]));
   });
 
   it('should be created', () => {
@@ -24,7 +23,7 @@ describe('SuperheroService', () => {
         { id: crypto.randomUUID(), name: 'Spiderman' },
         { id: crypto.randomUUID(), name: 'Superman' },
       ];
-      service.superheros = superheros;
+      localStorage.setItem('superheros', JSON.stringify(superheros));
 
       const response = await service.findAll();
 
@@ -44,7 +43,7 @@ describe('SuperheroService', () => {
         { id: crypto.randomUUID(), name: 'Manolito el fuerte', },
         { id: crypto.randomUUID(), name: 'Hulk', },
       ];
-      service.superheros = superheros;
+      localStorage.setItem('superheros', JSON.stringify(superheros));
 
       const response = await service.findAllByName('man');
 
@@ -55,7 +54,7 @@ describe('SuperheroService', () => {
       const response = await service.findAllByName('invalid');
 
       expect(response).toEqual([]);
-    })
+    });
   });
 
   describe('findOneById', () => {
@@ -64,7 +63,7 @@ describe('SuperheroService', () => {
         { id: crypto.randomUUID(), name: 'Spiderman' },
         { id: crypto.randomUUID(), name: 'Superman' },
       ];
-      service.superheros = superheros;
+      localStorage.setItem('superheros', JSON.stringify(superheros));
 
       const response = await service.findOneById(superheros[0].id);
 
@@ -78,21 +77,23 @@ describe('SuperheroService', () => {
 
       await service.create(superheroCreate);
 
-      expect(service.superheros.length).toBe(1);
-      expect(service.superheros[0].id).toBeDefined();
-      expect(service.superheros[0].name).toBe(superheroCreate.name);
+      const superheros = JSON.parse(localStorage.getItem('superheros')!);
+      expect(superheros.length).toBe(1);
+      expect(superheros[0].id).toBeDefined();
+      expect(superheros[0].name).toBe(superheroCreate.name);
     });
   });
 
   describe('update', () => {
     it('should update a superhero by id', async () => {
       const superhero: Superhero = { id: crypto.randomUUID(), name: 'Superman' };
-      service.superheros.push(superhero);
+      localStorage.setItem('superheros', JSON.stringify([superhero]));
       const superheroUpdate = { name: 'Hulk' };
 
       await service.update(superhero.id, superheroUpdate);
 
-      expect(service.superheros).toEqual([{ id: superhero.id, name: superheroUpdate.name }]);
+      const superheros = JSON.parse(localStorage.getItem('superheros')!);
+      expect(superheros).toEqual([{ id: superhero.id, name: superheroUpdate.name }]);
     });
   });
 
@@ -102,11 +103,12 @@ describe('SuperheroService', () => {
         { id: crypto.randomUUID(), name: 'Spiderman' },
         { id: crypto.randomUUID(), name: 'Superman' },
       ];
-      service.superheros = superheros;
+      localStorage.setItem('superheros', JSON.stringify(superheros));
 
       await service.delete(superheros[1].id);
 
-      expect(service.superheros).toEqual([superheros[0]]);
+      const superherosResponse = JSON.parse(localStorage.getItem('superheros')!);
+      expect(superherosResponse).toEqual([superheros[0]]);
     });
   });
 });

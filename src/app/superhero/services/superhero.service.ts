@@ -8,26 +8,38 @@ import { SuperheroUpdate } from '../domain/superhero-update.interface';
 })
 export class SuperheroService {
   private readonly INITIAL_SUPERHEROS = [
-    { id: '1', name: 'Spiderman', },
-    { id: '2', name: 'Superman', },
-    { id: '3', name: 'Manolito el fuerte', },
-    { id: '4', name: 'Hulk', },
+    { id: crypto.randomUUID(), name: 'Spiderman', },
+    { id: crypto.randomUUID(), name: 'Superman', },
+    { id: crypto.randomUUID(), name: 'Manolito el fuerte', },
+    { id: crypto.randomUUID(), name: 'Hulk', },
   ];
 
-  superheros: Superhero[] = [...this.INITIAL_SUPERHEROS];
+  constructor() {
+    if (localStorage.getItem('superheros') === null) {
+      localStorage.setItem('superheros', JSON.stringify(this.INITIAL_SUPERHEROS));
+    }
+  }
 
-  constructor() {}
+  private getSuperheros(): Superhero[] {
+    return JSON.parse(localStorage.getItem('superheros')!);
+  }
+
+  private setSuperheros(superheros: Superhero[]): void {
+    localStorage.setItem('superheros', JSON.stringify(superheros));
+  }
 
   async findAll(): Promise<Superhero[]> {
-    return this.superheros;
+    return this.getSuperheros();
   }
 
   async findAllByName(name: string): Promise<Superhero[]> {
-    return this.superheros.filter(superhero => superhero.name.toLowerCase().includes(name.toLowerCase()));
+    const superheros = this.getSuperheros();
+    return superheros.filter(superhero => superhero.name.toLowerCase().includes(name.toLowerCase()));
   }
 
   async findOneById(id: string): Promise<Superhero> {
-    const superhero = this.superheros.find(superhero => superhero.id === id);
+    const superheros = this.getSuperheros();
+    const superhero = superheros.find(superhero => superhero.id === id);
 
     if (!superhero) {
       throw new Error('There are no superheros with this id');
@@ -37,29 +49,38 @@ export class SuperheroService {
   }
 
   async create(superheroCreate: SuperheroCreate): Promise<void> {
-    this.superheros.push({
-      ...superheroCreate,
-      id: crypto.randomUUID(),
-    });
+    this.setSuperheros([
+      ...this.getSuperheros(),
+      {
+        ...superheroCreate,
+        id: crypto.randomUUID(),
+      },
+    ]);
   }
 
   async update(id: string, superheroUpdate: SuperheroUpdate): Promise<void> {
-    const index = this.superheros.findIndex(superhero => superhero.id === id);
+    const superheros = this.getSuperheros();
+    const index = superheros.findIndex(superhero => superhero.id === id);
 
     if (index === -1) {
       throw new Error('There are no superheros with this id');
     }
 
-    this.superheros[index] = Object.assign(this.superheros[index], superheroUpdate);
+    superheros[index] = Object.assign(superheros[index], superheroUpdate);
+
+    this.setSuperheros(superheros);
   }
 
   async delete(id: string): Promise<void> {
-    const index = this.superheros.findIndex(superhero => superhero.id === id);
+    const superheros = this.getSuperheros();
+    const index = superheros.findIndex(superhero => superhero.id === id);
 
     if (index === -1) {
       throw new Error('There are no superheros with this id');
     }
 
-    this.superheros.splice(index, 1);
+    superheros.splice(index, 1);
+
+    this.setSuperheros(superheros);
   }
 }
