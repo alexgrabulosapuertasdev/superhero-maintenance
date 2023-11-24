@@ -13,7 +13,10 @@
     </a>
   </header>
 
-  <table mat-table [dataSource]="superheros" matSort>
+  <p *ngIf="superheros.length === 0">
+    No hay superheroes en la lista, añade alguno para ver la tabla de superheroes
+  </p>
+  <table *ngIf="superheros.length > 0" mat-table [dataSource]="superheros" matSort>
     <ng-container matColumnDef="update">
       <th mat-header-cell *matHeaderCellDef></th>
       <td mat-cell *matCellDef="let element">
